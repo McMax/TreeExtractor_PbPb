@@ -223,6 +223,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
 						continue;
+
+					histos.histTTAverageDistance->Fill(calculate_distance(particleA, particleB));
+
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
 
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
@@ -237,10 +240,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					v = v1 + v2;
 					inv_mass = v.M();
 					
-					/*
 					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
 						continue;
-						*/
 
 					histos.histInvMass->Fill(inv_mass);
 
@@ -436,7 +437,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		}
 
 		//cout << "\rEvent " << ev;
-		if(!(ev%5000))
+		if(!(ev%50))
 			cout << "Event " << ev << endl;
 
 		if(write_to_root)
@@ -503,4 +504,87 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		histos.clear();
 		root_output_file->Close();
 	}
+}
+
+Float_t calculate_distance(Particle* partA, Particle* partB)
+{
+	static int count;
+	static float distance_sum;
+	static TVector2 trackA, trackB, mov;
+
+	count = 0;
+	distance_sum = 0;
+
+	//VTPC1 start
+	if((partA->GetVTPC1_Sx()!=9999) && (partB->GetVTPC1_Sx()!=9999))
+	{
+		trackA.Set(partA->GetVTPC1_Sx(),partA->GetVTPC1_Sy());
+		trackB.Set(partB->GetVTPC1_Sx(),partB->GetVTPC1_Sy());
+		mov = trackB - trackA;
+		distance_sum += mov.Mod();
+		//cout << "VTPC1 start. Distance: " << mov.Mod() << endl;
+		++count;
+	}
+
+	//VTPC1 end
+	if((partA->GetVTPC1_Ex()!=9999) && (partB->GetVTPC1_Ex()!=9999))
+	{
+		trackA.Set(partA->GetVTPC1_Ex(),partA->GetVTPC1_Sy());
+		trackB.Set(partB->GetVTPC1_Ex(),partB->GetVTPC1_Sy());
+		mov = trackB - trackA;
+		distance_sum += mov.Mod();
+		//cout << "VTPC1 end. Distance: " << mov.Mod() << endl;
+		++count;
+	}
+
+	//VTPC2 start
+	if((partA->GetVTPC2_Sx()!=9999) && (partB->GetVTPC2_Sx()!=9999))
+	{
+		trackA.Set(partA->GetVTPC2_Sx(),partA->GetVTPC2_Sy());
+		trackB.Set(partB->GetVTPC2_Sx(),partB->GetVTPC2_Sy());
+		mov = trackB - trackA;
+		distance_sum += mov.Mod();
+		//cout << "VTPC2 start. Distance: " << mov.Mod() << endl;
+		++count;
+	}
+
+	//VTPC2 end
+	if((partA->GetVTPC2_Ex()!=9999) && (partB->GetVTPC2_Ex()!=9999))
+	{
+		trackA.Set(partA->GetVTPC2_Ex(),partA->GetVTPC2_Sy());
+		trackB.Set(partB->GetVTPC2_Ex(),partB->GetVTPC2_Sy());
+		mov = trackB - trackA;
+		distance_sum += mov.Mod();
+		//cout << "VTPC2 end. Distance: " << mov.Mod() << endl;
+		++count;
+	}
+
+	//MTPC start
+	if((partA->GetMTPC_Sx()!=9999) && (partB->GetMTPC_Sx()!=9999))
+	{
+		trackA.Set(partA->GetMTPC_Sx(),partA->GetMTPC_Sy());
+		trackB.Set(partB->GetMTPC_Sx(),partB->GetMTPC_Sy());
+		mov = trackB - trackA;
+		distance_sum += mov.Mod();
+		//cout << "MTPC start. Distance: " << mov.Mod() << endl;
+		++count;
+	}
+
+	//MTPC end
+	if((partA->GetMTPC_Ex()!=9999) && (partB->GetMTPC_Ex()!=9999))
+	{
+		trackA.Set(partA->GetMTPC_Ex(),partA->GetMTPC_Sy());
+		trackB.Set(partB->GetMTPC_Ex(),partB->GetMTPC_Sy());
+		mov = trackB - trackA;
+		distance_sum += mov.Mod();
+		//cout << "MTPC end. Distance: " << mov.Mod() << endl;
+		++count;
+	}
+
+	if(count==0)
+		return -1;
+
+	distance_sum = distance_sum/count;
+
+	return distance_sum;
 }

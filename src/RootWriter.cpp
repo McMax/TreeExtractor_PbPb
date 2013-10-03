@@ -101,6 +101,8 @@ void Histos::init()
 	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
 	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
 
+	histTTAverageDistance = new TH1F("histTTAverageDistance","Two track average distance",500,0,100);
+
 	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 
@@ -235,6 +237,7 @@ void Histos::write()
 	histnDedxMtpc->Write();
 	histnDedxMtpcPos->Write();
 	histnDedxMtpcNeg->Write();
+	histTTAverageDistance->Write();
 	histPartPopMatrixPos->Write();
 	histPartPopMatrixNeg->Write();
 }
@@ -331,6 +334,7 @@ void Histos::clear()
 	delete histnDedxMtpc;
 	delete histnDedxMtpcPos;
 	delete histnDedxMtpcNeg;
+	delete histTTAverageDistance;
 	delete histPartPopMatrixPos;	
 	delete histPartPopMatrixNeg;	
 }
