@@ -155,7 +155,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
-		//debugfile << event->GetNpa() << endl;
+		//debugfile << "Event: " << ev << ": " << event->GetNpa() << " particles" << endl;
 		
 		phi[Neg] = phi[All] = phi[Pos]= 0.;
 		phiSq[Neg] = phiSq[All] = phiSq[Pos] = 0.;
@@ -171,12 +171,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			}
 		}
 
-		//debugfile << ev << "\t" << event->GetNpa() << endl;
-
-		//Przypadki do liczenia korelacji
-		//if((event->GetNneg()) < 7)
-		//	continue;
-
 		unique_particles_y.clear();
 		unique_particles_eta.clear();
 		unique_particles_y_025.clear();
@@ -186,6 +180,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		{
 			particleA = event->GetParticle(i);
 			pid1 = particleA->GetPid();
+			//debugfile << "Particle " << i << ": " << pid1 << " px=" << particleA->GetPx() << endl;
 
 			if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
 				continue;
