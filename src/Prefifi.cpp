@@ -35,7 +35,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 	bool with_fifivsbpar = false;
 	bool with_prefifi = true;
-	bool with_na61accmap = true;
 
 	if(!(fifivsbpar.compare("NONE")))
 	{
