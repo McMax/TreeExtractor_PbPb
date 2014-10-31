@@ -27,7 +27,7 @@ $(PROGRAM): $(OBJECTS) $(PEV_OBJECTS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(OBJ_DIR)
-	$(CC) -c $(CCFLAGS) $< -o $@ 
+	$(CC) -c $(CCFLAGS) -g $< -o $@ 
 
 $(PEV_OBJECTS):
 	@echo "No base libs. Create them"
