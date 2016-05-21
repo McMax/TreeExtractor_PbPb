@@ -61,10 +61,10 @@ void Histos::init()
 	histDyDphiPos = new TH2F("histDyDphiPos","#Deltay versus #Delta#phi, pos.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
 	histDyDphiNeg = new TH2F("histDyDphiNeg","#Deltay versus #Delta#phi, neg.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
 	histDyDphiUnlike = new TH2F("histDyDphiUnlike","#Deltay versus #Delta#phi, unlike-sign;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
-	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
-	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
-	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
-	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
+	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta#Delta#phi;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta#Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta#Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta#Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
 	histDedx_DyDphiUnlike_05 = new TH2F("histDedx_DyDphiUnlike_05","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
@@ -101,7 +101,8 @@ void Histos::init()
 	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
 	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
 
-	histTTAverageDistance = new TH1D("histTTAverageDistance","Two track average distance",500,0,100);
+	histTTAverageDistance = new TH1D("histTTAverageDistance","Two track average distance;distance [cm]",500,0,100);
+	histTTAverageDistanceCut = new TH1D("histTTAverageDistanceCut","Two track average distance (after cut);distance [cm]",500,0,100);
 
 	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
@@ -238,6 +239,7 @@ void Histos::write()
 	histnDedxMtpcPos->Write();
 	histnDedxMtpcNeg->Write();
 	histTTAverageDistance->Write();
+	histTTAverageDistanceCut->Write();
 	histPartPopMatrixPos->Write();
 	histPartPopMatrixNeg->Write();
 }
@@ -335,6 +337,7 @@ void Histos::clear()
 	delete histnDedxMtpcPos;
 	delete histnDedxMtpcNeg;
 	delete histTTAverageDistance;
+	delete histTTAverageDistanceCut;
 	delete histPartPopMatrixPos;	
 	delete histPartPopMatrixNeg;	
 }

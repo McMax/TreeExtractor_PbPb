@@ -131,6 +131,7 @@ struct Histos
 	TH1I	*histnDedxMtpcNeg;
 
 	TH1D	*histTTAverageDistance;
+	TH1D	*histTTAverageDistanceCut;
 
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;

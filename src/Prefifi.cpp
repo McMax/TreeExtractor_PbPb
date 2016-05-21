@@ -111,7 +111,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		angle_j,
 		angle_diff,
 		y_diff,
-		eta_diff;
+		eta_diff,
+		tt_distance;
 	
 	bool	positive,
 		positive_j;
@@ -190,8 +191,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
-			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-				continue;
+//			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
+//				continue;
 
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
@@ -215,13 +216,15 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					particleB = event->GetParticle(j);
 					pid2 = particleB->GetPid();
 
-					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
-						continue;
+					tt_distance = calculate_distance(particleA, particleB);
+					histos.histTTAverageDistance->Fill(tt_distance);
 
-					histos.histTTAverageDistance->Fill(calculate_distance(particleA, particleB));
+				//	if(tt_distance < 0.6)
+				//		continue;
+
+					histos.histTTAverageDistanceCut->Fill(tt_distance);
 
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
-
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
 
 					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
@@ -234,8 +237,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					v = v1 + v2;
 					inv_mass = v.M();
 					
-					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
-						continue;
+					//if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
+					//	continue;
 
 					histos.histInvMass->Fill(inv_mass);
 
