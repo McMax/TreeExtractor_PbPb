@@ -194,6 +194,10 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 //			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
 //				continue;
 
+			//Minimal pT cut
+			if(pt1 < 0.2)
+				continue;
+
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
@@ -262,6 +266,10 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					//cout << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
 
 					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
+					
+					//Minimal pT cut
+					if(pt2 < 0.2)
+						continue;
 
 					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
 
