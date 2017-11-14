@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <time.h>
+#include <cstdlib>
 #include "TROOT.h"
 #include "TMath.h"
 #include "TFile.h"
@@ -17,41 +18,27 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	if(argc == 6)
+	if(argc == 4)
 	{
 		TFile *root_tree_file = new TFile(argv[1]);
 		TTree *particletree = (TTree*)root_tree_file->Get("events");
-		TString root_filename = argv[3];
-		float energy = atof(argv[2]);
-		string fifivsbpar = argv[4];
-		TString root_output_filename = argv[5];
-
-		cout << "Reading file" << endl;
-
-		//Biore rozklad ile eventow mialo dany rozmiar
-		map<int, int> distribution = getDistro(root_filename);
-		mainanalyze(particletree, distribution[0], true, energy, fifivsbpar, root_output_filename);
-
-		root_tree_file->Close();
-	}
-	else if(argc == 4) //Pb-Pb mode
-	{
-		TFile *root_tree_file = new TFile(argv[1]);
-		TTree *particletree = (TTree*)root_tree_file->Get("events");
-		float energy = atof(argv[2]);
+		float momentum = atof(argv[2]);
 		TString root_output_filename = argv[3];
 
 		cout << "Reading file" << endl;
+		cout << "There are two internal cuts here!" << endl;
+		cout << "if(y_prot_cms > (particles.y_cms - 0.5)) continue;" << endl << "and" << endl;
+		cout << "if(inv_mass < 0.285) continue;" << endl;
 
-		//Biore rozklad ile eventow mialo dany rozmiar
-		mainanalyzePb(particletree, energy, root_output_filename);
+		mainanalyze(particletree, momentum, root_output_filename);
 
 		root_tree_file->Close();
+
+		return 0;
 	}
 	else
 	{
-		cout << "USAGE: extractor <path_to_particle_tree> <energy> <root_file> <fifivsbpar> <outputfile>" << endl;
-		cout << "OR: extractor <path_to_particle_tree> <energy> <outputfile>" << endl;
+		cout << "USAGE: extractor <path_to_particle_tree> <beam_momentum> <outputfile>" << endl;
 		return -1;
 	}
 }
