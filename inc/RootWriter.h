@@ -11,6 +11,7 @@
 const float pion_mass = 0.13957018; //GeV/c^2
 const float proton_mass = 0.938272013; //GeV/c^2
 const float nucleon_mass = 0.9389186795; //GeV/c^2
+const float neutron_mass = 0.939565346; //GeV/c^2
 
 enum charge
 {
@@ -54,6 +55,7 @@ struct Histos
 	TH1F	*histEtacmsNeg;
 	TH1F	*histEtacmsPos;
 
+	TH1F	*histPtWide;
 	TH1F	*histPtAll;
 	TH1F	*histPtNeg;
 	TH1F	*histPtPos;
@@ -66,6 +68,7 @@ struct Histos
 	TH1F	*histMeanPt;
 	TH1F	*histMeanPtNeg;
 	TH1F	*histMeanPtPos;
+	TH1F	*histPtot;
 
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;
@@ -88,11 +91,6 @@ struct Histos
 	TH2F	*histDetaDphiUnlike;
 
 	TH1D	*histInvMass;
-
-	TH2F	*histDedx_DetaDphiUnlike_05;
-	TH2F	*histDedx_DyDphiUnlike_05;
-	TH2F	*histDedx_DetaDphiUnlike_025;
-	TH2F	*histDedx_DyDphiUnlike_025;
 
 	TH2F	*histDedx;
 	TH2F	*histDedxPos;
@@ -130,9 +128,6 @@ struct Histos
 	TH1I	*histnDedxMtpcPos;
 	TH1I	*histnDedxMtpcNeg;
 
-	TH1D	*histTTAverageDistance;
-	TH1D	*histTTAverageDistanceCut;
-
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 
@@ -165,9 +160,15 @@ public:
 
 	Particles() {}
 
-	void init(Histos *histograms, const float ener);
+	void init(Histos *histograms, const float momentum);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
+
+	static float calc_beta_sym(float b_momentum)	//Calculation of c.m.s. beta with assumption of symmetric system
+	{
+		return (b_momentum/(TMath::Sqrt(b_momentum*b_momentum+nucleon_mass*nucleon_mass)+nucleon_mass));
+	}
+
 	static Float_t choose_dedx(Particle* particle)
 	{
 		static Int_t vtpc1_part;
@@ -199,11 +200,21 @@ public:
 		}
 	}
 	
-	static float inline calc_beta(float ener) { return (ener/(ener+nucleon_mass));}
-	static float inline calc_gamma(float ener) { return (1/(TMath::Sqrt(1-TMath::Power(calc_beta(ener),2))));}
+	//calculation of c.m.s. beta for assymetric system
+	static float calc_beta_asym(float b_momentum, int beam_protons, int beam_neutrons, int target_protons, int target_neutrons)
+	{ 
+		double total_beam_momentum = b_momentum*(beam_protons+beam_neutrons);
+		std::cout << "Total beam momentum: " << total_beam_momentum << std::endl;
+		double beam_mass = beam_protons*proton_mass + beam_neutrons*neutron_mass;
+		double target_mass = target_protons*proton_mass + target_neutrons*neutron_mass;
+		double beam_energy = TMath::Sqrt(total_beam_momentum*total_beam_momentum + beam_mass*beam_mass);
+		std::cout << "Beam energy: " << beam_energy << std::endl;
+
+		return (total_beam_momentum/(beam_energy+target_mass));
+	}
+	static float inline calc_gamma(float momentum) { return (1/(TMath::Sqrt(1-TMath::Power(beta,2))));}
 	float inline calc_gbE(float ener) { return (gamma_beta_e = beta*gamma*ener);}
 };
 
-std::map<int,int> getDistro(TString);
 float mk_angle3(float);
 #endif
