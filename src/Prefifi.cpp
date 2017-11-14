@@ -86,8 +86,8 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
-			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-				continue;
+//			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
+//				continue;
 
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
@@ -105,8 +105,9 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 				{
 					particleB = event->GetParticle(j);
 
-					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
+					histos.histTTAverageDistanceCut->Fill(tt_distance);
 
+					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
 
 					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
