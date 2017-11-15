@@ -22,7 +22,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 {
 	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
 
-	float angle, angle3,
+	float angle,
 		  p1, p2,
 		  pt1, pt2,
 		  pz_cms1, pz_cms2,
@@ -68,7 +68,6 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 	cout << "Writing events" << endl;
 
-	//for(ev=0; ev<treeNentries; ++ev)
 	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
@@ -90,8 +89,8 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 //				continue;
 
 			//Minimal pT cut
-			if(pt1 < 0.2)
-				continue;
+//			if(pt1 < 0.2)
+//				continue;
 
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
@@ -100,16 +99,11 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 			positive = particleA->isPositive();
 
-			if(!positive)
-				angle3 = mk_angle3(angle);
-
 			if(event->GetNpa() > 1)
 			{
 				for(j=i+1; j<event->GetNpa(); ++j)
 				{
 					particleB = event->GetParticle(j);
-
-					histos.histTTAverageDistanceCut->Fill(tt_distance);
 
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
@@ -124,8 +118,8 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 					v = v1 + v2;
 					inv_mass = v.M();
 
-					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
-						continue;
+//					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
+//						continue;
 
 					histos.histInvMass->Fill(inv_mass);
 
@@ -151,8 +145,8 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
 					
 					//Minimal pT cut
-					if(pt2 < 0.2)
-						continue;
+//					if(pt2 < 0.2)
+//						continue;
 
 					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
 
@@ -212,33 +206,35 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 			else
 				n[Neg]++;
 
-			//cout << "\rEvent " << ev;
-			if(!(ev%50))
-				cout << "Event " << ev << endl;
-
-			particles.newEvent();
 		}
 
-		//event--;
+		//cout << "\rEvent " << ev;
+		if(!(ev%10))
+			cout << "Event " << ev << " / " << treeNentries << endl;
 
-		cout << endl << "Filling with zeros" << endl;
+		particles.newEvent();
 
-		cout << "All correlations: " << all_correlations << endl;
-		cout << "Like-sign correlations: " << correlations << endl;
-		cout << "Positive correlations: " << pos_correlations << endl;
-		cout << "Negative correlations: " << neg_correlations << endl;
-		cout << "=======================" << endl << "All particles: " << all_particles << ", all events: " << ev << endl;
-		cout << "Mean multiplicity: " << (((double)all_particles)/ev) << endl;
-
-		//histos.histCharged->AddBinContent(1,zeros);
-		//histos.histChargedNeg->AddBinContent(1,zeros);
-		//histos.histChargedPos->AddBinContent(1,zeros);
-		//	histos.histCharged->ResetStats();
-		//	histos.histChargedNeg->ResetStats();
-		//	histos.histChargedPos->ResetStats();
-		root_output_file->cd();
-		histos.write();
-		histos.clear();
-		root_output_file->Close();
 	}
+
+	//event--;
+
+	cout << endl << "Filling with zeros" << endl;
+
+	cout << "All correlations: " << all_correlations << endl;
+	cout << "Like-sign correlations: " << correlations << endl;
+	cout << "Positive correlations: " << pos_correlations << endl;
+	cout << "Negative correlations: " << neg_correlations << endl;
+	cout << "=======================" << endl << "All particles: " << all_particles << ", all events: " << ev << endl;
+	cout << "Mean multiplicity: " << (((double)all_particles)/ev) << endl;
+
+	//histos.histCharged->AddBinContent(1,zeros);
+	//histos.histChargedNeg->AddBinContent(1,zeros);
+	//histos.histChargedPos->AddBinContent(1,zeros);
+	//	histos.histCharged->ResetStats();
+	//	histos.histChargedNeg->ResetStats();
+	//	histos.histChargedPos->ResetStats();
+	root_output_file->cd();
+	histos.write();
+	histos.clear();
+	root_output_file->Close();
 }

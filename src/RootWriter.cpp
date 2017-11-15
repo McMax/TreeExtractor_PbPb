@@ -61,9 +61,9 @@ void Histos::init()
 	histDyDphiPos = new TH2F("histDyDphiPos","#Deltay versus #Delta#phi, pos.;#Delta#phi [rad]; #Deltay_{#pi}",192,0,TMath::Pi(),192,0,6);
 	histDyDphiNeg = new TH2F("histDyDphiNeg","#Deltay versus #Delta#phi, neg.;#Delta#phi [rad]; #Deltay_{#pi}",192,0,TMath::Pi(),192,0,6);
 	histDyDphiUnlike = new TH2F("histDyDphiUnlike","#Deltay versus #Delta#phi, unlike-sign;#Delta#phi [rad]; #Deltay_{#pi}",192,0,TMath::Pi(),192,0,6);
-	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),200,0,6);
-	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),200,0,6);
-	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),200,0,6);
+	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
 	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
@@ -471,7 +471,6 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histThetaPos->Fill(theta);
 		histos->histThetacmsPos->Fill(theta_cms);
 		histos->histPhiVsPtPos->Fill(angle, pt);
-		histos->histPartPopMatrixPos->Fill(p,pt,angle);
 		histos->histDedxPos->Fill(p,particle->GetdEdx());
 		histos->histDedxVtpc1Pos->Fill(p,particle->GetdEdxVtpc1());
 		histos->histDedxVtpc2Pos->Fill(p,particle->GetdEdxVtpc2());
@@ -486,7 +485,6 @@ void Particles::analyze(Particle *particle, const int ener)
 	else
 	{
 		n[Neg]++;
-		histos->histPartPopMatrixNeg->Fill(p,pt,angle);
 		histos->histAngleNegNotrot->Fill(angle);	//bez obrotu (angle2)
 		angle = mk_angle3(angle);			//obrot (angle2 -> angle3)
 		histos->histAngleNeg->Fill(angle);		//z obrotem (angle3)
