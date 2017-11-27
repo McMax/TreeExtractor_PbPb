@@ -20,7 +20,7 @@ using namespace std;
 
 void mainanalyze(TTree *particletree, const float beam_momentum, const TString output_filename="Extracted_distributions.root")
 {
-	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
+	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2 and beam momentum: " << beam_momentum << endl;
 
 	float angle,
 		  p1, p2,

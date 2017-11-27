@@ -26,9 +26,9 @@ int main(int argc, char** argv)
 		TString root_output_filename = argv[3];
 
 		cout << "Reading file" << endl;
-		cout << "There are two internal cuts here!" << endl;
-		cout << "if(y_prot_cms > (particles.y_cms - 0.5)) continue;" << endl << "and" << endl;
-		cout << "if(inv_mass < 0.285) continue;" << endl;
+		//cout << "There are two internal cuts here!" << endl;
+		//cout << "if(y_prot_cms > (particles.y_cms - 0.5)) continue;" << endl << "and" << endl;
+		//cout << "if(inv_mass < 0.285) continue;" << endl;
 
 		mainanalyze(particletree, momentum, root_output_filename);
 
