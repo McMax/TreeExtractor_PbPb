@@ -85,9 +85,6 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
-//			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-//				continue;
-
 			//Minimal pT cut
 //			if(pt1 < 0.2)
 //				continue;
@@ -122,11 +119,6 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 //						continue;
 
 					histos.histInvMass->Fill(inv_mass);
-
-					/*
-					   if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-					   continue;
-					   */
 
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
